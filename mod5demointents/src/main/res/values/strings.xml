@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">mod5demoIntents</string>
+    <string name="title_activity_destination">DestinationActivity</string>
+    <string name="title_activity_smsreader">SMSReaderActivity</string>
+</resources>
