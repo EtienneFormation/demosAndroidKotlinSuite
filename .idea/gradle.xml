@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/mod3correction" />
+            <option value="$PROJECT_DIR$/mod4corrviewmodel" />
+            <option value="$PROJECT_DIR$/mod4demonavigationwithstate" />
             <option value="$PROJECT_DIR$/mod4demoremember" />
             <option value="$PROJECT_DIR$/mod4demoviewmodel" />
           </set>
