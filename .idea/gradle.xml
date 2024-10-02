@@ -16,6 +16,8 @@
             <option value="$PROJECT_DIR$/mod4demoremember" />
             <option value="$PROJECT_DIR$/mod4demoviewmodel" />
             <option value="$PROJECT_DIR$/mod5demointents" />
+            <option value="$PROJECT_DIR$/mod5demonavigation" />
+            <option value="$PROJECT_DIR$/mod5demotestscompose" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
