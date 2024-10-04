@@ -55,6 +55,9 @@
       <SelectionState runConfigName="mod6demodatastore">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="mod6corrdatastore">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
