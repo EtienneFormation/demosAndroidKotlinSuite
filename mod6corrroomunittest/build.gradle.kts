@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+
 }
 
 android {
-    namespace = "fr.eni.mod6demoroom"
+    namespace = "com.eniecole.mod6corrroomunittest"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "fr.eni.mod6demoroom"
+        applicationId = "com.eniecole.mod6corrroomunittest"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -51,14 +52,11 @@ android {
 }
 
 dependencies {
-    val room_version = "2.6.1"
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
-
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
