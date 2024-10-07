@@ -1,11 +1,20 @@
 package fr.eni.filrouge.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import fr.eni.filrouge.dao.ProductDao
 import fr.eni.filrouge.data.Product
+import fr.eni.filrouge.dbConfiguration.DatabaseClient
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ListProductsVM : ViewModel() {
+class ListProductsVM(val productDao: ProductDao) : ViewModel() {
     private val _listArticle = listOf(
         Product(
             1,
@@ -106,11 +115,27 @@ class ListProductsVM : ViewModel() {
             listOf("55% coton 45% polyester", "Homologué IJF", "100 à 160cm")
         )
     )
-    private val _productsState = MutableStateFlow(ProductListState(
-        productList = _listArticle
-    ))
+    private val _productsState = MutableStateFlow(ProductListState())
     val productState : StateFlow<ProductListState> = _productsState
 
+    init {
+        viewModelScope.launch {
+            if(productDao.getAll().isEmpty()){
+                productDao.insertAll(
+                    _listArticle
+                )
+            }
+            _loadProducts()
+        }
+    }
+    private suspend fun _loadProducts(){
+        withContext(Dispatchers.IO){
+            val products = productDao.getAll()
+            _productsState.value = _productsState.value.copy(
+                productList = products
+            )
+        }
+    }
     fun selectCategory(category : String) {
         if (category == _productsState.value.selectedCategory) {
             _productsState.value = ProductListState(
@@ -131,7 +156,25 @@ class ListProductsVM : ViewModel() {
     }
 
     fun getById(id : Int) : Product? {
+        if(_productsState.value.productList.isEmpty()){
+            return null
+        }
         return _productsState.value.productList.find { it.id == id }
+    }
+
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras
+            ): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+                val db = DatabaseClient(application.applicationContext).appDatabase
+                return ListProductsVM(db.productDao()) as T
+            }
+        }
     }
 }
 
@@ -139,3 +182,4 @@ data class ProductListState (
     val selectedCategory: String? = null,
     val productList : List<Product> = emptyList()
 )
+

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -89,7 +90,7 @@ fun Menu(
     navController : NavHostController = rememberNavController(),
     startDestination : String = "articles"
 ) {
-    Surface (modifier = modifier) {
+    Surface  {
         NavHost(
             modifier = modifier,
             navController = navController,
@@ -111,7 +112,7 @@ fun Menu(
 @Composable
 fun ArticleList(
     navigation : (Int) -> Unit,
-    productsViewModel : ListProductsVM = viewModel()
+    productsViewModel : ListProductsVM = viewModel(factory = ListProductsVM.Factory)
 ) {
     val productsState = productsViewModel.productState.collectAsState().value
 
@@ -125,7 +126,7 @@ fun ArticleList(
 fun Categories(categories: List<String>, productsViewModel : ListProductsVM) {
     val selectedCategory = productsViewModel.productState.collectAsState().value.selectedCategory
 
-    LazyRow {
+    LazyRow() {
         items(categories) {
             FilterChip(
                 onClick = { productsViewModel.selectCategory(it) },
@@ -176,9 +177,12 @@ fun ProductCard(product : Product, navigation : (Int) -> Unit) {
 }
 
 @Composable
-fun ArticleDetail(id : Int, productsViewModel : ListProductsVM = viewModel()) {
-    val article = productsViewModel.getById(id)!!
-
+fun ArticleDetail(id : Int, productsViewModel : ListProductsVM =
+    viewModel(factory = ListProductsVM.Factory)) {
+    val article = productsViewModel.getById(id)
+    if(article==null){
+        Text("Pac encore Chagé")
+    }else
     Surface {
         Column {
             Text(
@@ -200,7 +204,7 @@ fun ArticleDetail(id : Int, productsViewModel : ListProductsVM = viewModel()) {
             Text(article.description)
             Title("Caractéristiques")
             LazyColumn {
-                items(article.caracteristics) {
+                items(article.characteristics) {
                     Text(it)
                 }
             }
