@@ -15,7 +15,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 private const val TAG = "ListPonyVM"
 class ListPonyVM : ViewModel(){
     private val _ponies = mutableStateOf<DataBikes?>(null)
@@ -35,10 +34,12 @@ class ListPonyVM : ViewModel(){
                     if (response.isSuccessful) {
                         // Utilisez les données ici
                         val body = response.body();
-                        print("success: ${body}")
+                        Log.i(TAG, "onResponse: $body")
                         body?.data?.apply { bikes = bikes.filter {
                             it.vehicle_type_id == "scooter"
                         } }
+                        Log.v(TAG, "onResponse: Liste Bikes filtrée")
+
                         _ponies.value = body?.data
                     } else {
                         _ponies.value = null

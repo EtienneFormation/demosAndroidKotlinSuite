@@ -5,16 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import fr.eni.filrouge.dao.ProductDao
-import fr.eni.filrouge.data.Product
-import fr.eni.filrouge.dbConfiguration.DatabaseClient
+import fr.eni.filrouge.data.model.Product
+import fr.eni.filrouge.data.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListProductsVM(val productDao: ProductDao) : ViewModel() {
+class ListProductsVM(val repository: ProductRepository) : ViewModel() {
     private val _listArticle = listOf(
         Product(
             1,
@@ -51,7 +50,7 @@ class ListProductsVM(val productDao: ProductDao) : ViewModel() {
             "https://www.fightingfilms.shop/wp-content/uploads/2021/07/ceinture-judo-verte.webp",
             "Toutes nos ceintures de judo sont conformes aux normes officielles de l’IJF (International Judo Federation). Comme tous les modèles de ceinture de judo, cette ceinture est faite d’un noyau de coton semi-rigide avec de nombreuses surpiqûres bien alignées. L’ensemble est renforcé par une couche extérieure avec un mélange de coton et de soie. À l’inverse des ceintures de judo fines de type Rouleau de tissu, notre ceinture est épaisse et rigide. Enfin, un élégant logo brodé en rouge vient donner son style unique à cette ceinture.",
             listOf("Verte", "Epaisse")
-        ),Product(
+        ), Product(
             5,
             "Ceinture Orange",
             30,
@@ -120,17 +119,12 @@ class ListProductsVM(val productDao: ProductDao) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            if(productDao.getAll().isEmpty()){
-                productDao.insertAll(
-                    _listArticle
-                )
-            }
             _loadProducts()
         }
     }
     private suspend fun _loadProducts(){
         withContext(Dispatchers.IO){
-            val products = productDao.getAll()
+            val products = repository.fetchProducts()
             _productsState.value = _productsState.value.copy(
                 productList = products
             )
@@ -171,8 +165,7 @@ class ListProductsVM(val productDao: ProductDao) : ViewModel() {
                 extras: CreationExtras
             ): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
-                val db = DatabaseClient(application.applicationContext).appDatabase
-                return ListProductsVM(db.productDao()) as T
+                return ListProductsVM(ProductRepository(application)) as T
             }
         }
     }

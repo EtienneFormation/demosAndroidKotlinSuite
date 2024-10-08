@@ -1,4 +1,4 @@
-package fr.eni.filrouge.dbConfiguration
+package fr.eni.filrouge.data.dao.db.dbConfiguration
 
 import android.content.Context
 import androidx.room.Room

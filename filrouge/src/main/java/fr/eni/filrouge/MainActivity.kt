@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,7 +43,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import fr.eni.filrouge.data.Product
+import fr.eni.filrouge.data.model.Product
 import fr.eni.filrouge.ui.theme.Mod3layoutComposeTheme
 import fr.eni.filrouge.viewmodel.ListProductsVM
 
@@ -183,33 +182,33 @@ fun ArticleDetail(id : Int, productsViewModel : ListProductsVM =
     if(article==null){
         Text("Pac encore Chagé")
     }else
-    Surface {
-        Column {
-            Text(
-                text = article.name,
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = "${article.price}€",
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(Modifier.padding(vertical = 8.dp))
-            AsyncImage(
-                model = article.url,
-                contentDescription = "oui",
-                modifier = Modifier.height(90.dp)
-            )
-            Spacer(Modifier.padding(vertical = 8.dp))
-            Title("Description")
-            Text(article.description)
-            Title("Caractéristiques")
-            LazyColumn {
-                items(article.characteristics) {
-                    Text(it)
+        Surface {
+            Column {
+                Text(
+                    text = article.name,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = "${article.price}€",
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(Modifier.padding(vertical = 8.dp))
+                AsyncImage(
+                    model = article.url,
+                    contentDescription = "oui",
+                    modifier = Modifier.height(90.dp)
+                )
+                Spacer(Modifier.padding(vertical = 8.dp))
+                Title("Description")
+                Text(article.description)
+                Title("Caractéristiques")
+                LazyColumn {
+                    items(article.characteristics) {
+                        Text(it)
+                    }
                 }
             }
         }
-    }
 }
 
 @Composable

@@ -51,6 +51,11 @@ android {
 }
 
 dependencies {
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+
     //JSON
     implementation(libs.gson)
 
@@ -63,7 +68,9 @@ dependencies {
 
     //Compose
     implementation(libs.coil.compose)
+    //DI ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
     implementation(libs.androidx.navigation.compose)
 
     //Core

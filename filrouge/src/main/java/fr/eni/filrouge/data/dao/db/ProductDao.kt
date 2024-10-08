@@ -1,9 +1,9 @@
-package fr.eni.filrouge.dao
+package fr.eni.filrouge.data.dao.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import fr.eni.filrouge.data.Product
+import fr.eni.filrouge.data.model.Product
 
 @Dao
 interface ProductDao {

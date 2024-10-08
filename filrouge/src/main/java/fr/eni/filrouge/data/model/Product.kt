@@ -1,4 +1,4 @@
-package fr.eni.filrouge.data
+package fr.eni.filrouge.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
