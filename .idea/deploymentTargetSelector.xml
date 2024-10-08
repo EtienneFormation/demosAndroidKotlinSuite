@@ -53,6 +53,9 @@
       <SelectionState runConfigName="writeAndReadYourEntity()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="mod7demoretrofit">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
