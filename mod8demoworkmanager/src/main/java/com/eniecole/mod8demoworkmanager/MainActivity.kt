@@ -37,7 +37,7 @@ fun SyncDbInfo(viewModel: ListThingsViewModel = viewModel(factory = ListThingsVi
     Text(
         text = when(viewModel.resultDbSync.value) {
             null->"Info Sync : Pas encore lancée"
-            true->"Info Sync : Lancée"
+            true->"Info Sync : Done !"
             false->"Info Sync : Erreur"
         },
         modifier = modifier

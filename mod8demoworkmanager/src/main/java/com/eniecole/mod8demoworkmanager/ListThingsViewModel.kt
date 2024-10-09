@@ -4,13 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.await
 import kotlinx.coroutines.launch
 
 class ListThingsViewModel(val workManager: WorkManager): ViewModel() {
@@ -30,13 +31,16 @@ class ListThingsViewModel(val workManager: WorkManager): ViewModel() {
             .setRequiresBatteryNotLow(true)
             .build()
         val syncDbRequest = OneTimeWorkRequestBuilder<SyncDBWorker>()
-            syncDbRequest.setConstraints(constraintsWifiStorage)
-        val oneTimeWorkRequest =  syncDbRequest.build()
-        val operation = workManager.beginWith(oneTimeWorkRequest).enqueue().await()
-        _resultDbSync.value = true
-
-
-
+                .setConstraints(constraintsWifiStorage)
+                .build()
+        workManager.enqueue(syncDbRequest)
+        workManager.getWorkInfoByIdLiveData(syncDbRequest.id).asFlow().collect {
+            when (it.state) {
+                WorkInfo.State.SUCCEEDED -> _resultDbSync.value = true
+                WorkInfo.State.FAILED -> _resultDbSync.value = false
+                else -> _resultDbSync.value = null
+            }
+        }
     }
 
     companion object {
