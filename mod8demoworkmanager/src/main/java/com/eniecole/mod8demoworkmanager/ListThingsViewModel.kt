@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.await
@@ -21,9 +23,16 @@ class ListThingsViewModel(val workManager: WorkManager): ViewModel() {
         }
     }
     suspend fun sync(){
-        _resultDbSync.value = null
-        val syncDbRequest = OneTimeWorkRequestBuilder<SyncDBWorker>().build()
-        val operation = workManager.beginWith(syncDbRequest).enqueue().await()
+        _resultDbSync.value = null;
+        val constraintsWifiStorage=Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+        val syncDbRequest = OneTimeWorkRequestBuilder<SyncDBWorker>()
+            syncDbRequest.setConstraints(constraintsWifiStorage)
+        val oneTimeWorkRequest =  syncDbRequest.build()
+        val operation = workManager.beginWith(oneTimeWorkRequest).enqueue().await()
         _resultDbSync.value = true
 
 
