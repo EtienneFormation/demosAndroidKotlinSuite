@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.work.WorkManager
 import fr.eni.filrouge.data.model.Product
 import fr.eni.filrouge.data.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListProductsVM(val repository: ProductRepository) : ViewModel() {
+class ListProductsVM(val repository: ProductRepository, workManager: WorkManager) : ViewModel() {
     private val _listArticle = listOf(
         Product(
             1,
@@ -165,7 +166,10 @@ class ListProductsVM(val repository: ProductRepository) : ViewModel() {
                 extras: CreationExtras
             ): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
-                return ListProductsVM(ProductRepository(application)) as T
+                return ListProductsVM(
+                    ProductRepository(application),
+                    WorkManager.getInstance(application.applicationContext)
+                ) as T
             }
         }
     }
