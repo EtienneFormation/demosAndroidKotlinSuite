@@ -125,7 +125,7 @@ fun ArticleList(
 fun Categories(categories: List<String>, productsViewModel : ListProductsVM) {
     val selectedCategory = productsViewModel.productState.collectAsState().value.selectedCategory
 
-    LazyRow() {
+    LazyRow {
         items(categories) {
             FilterChip(
                 onClick = { productsViewModel.selectCategory(it) },

@@ -11,6 +11,7 @@ class ProductRepository(val app: Application) {
     val productApiDao = RetrofitClient.productApiService
     val productRoomDao =  DatabaseClient(app.applicationContext).appDatabase.productDao()
 
+
     suspend fun syncApiDB(){
         //Je télécharge mes données du productApiDao (getAll)
 

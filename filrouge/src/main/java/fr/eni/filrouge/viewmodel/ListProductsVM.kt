@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ListProductsVM(val repository: ProductRepository, workManager: WorkManager) : ViewModel() {
-    private val _listArticle = listOf(
+    /*private val _listArticle = listOf(
         Product(
             1,
             "Ceinture marron",
@@ -114,7 +114,11 @@ class ListProductsVM(val repository: ProductRepository, workManager: WorkManager
             "Le kimono de judo pour enfant Hajime en grain de riz de très bonne qualité. Agréable à porter pour les enfants, léger et robuste à la fois, le kimono Hajime est également livré avec une ceinture blanche. Ainsi, c’est le judogi idéal pour commencer l’apprentissage du judo avec les meilleurs atouts. Avec un grammage de 320 g/m2, ce judogi de qualité est plus solide et plus durable que la plupart des autres kimonos de judo pour enfants.",
             listOf("55% coton 45% polyester", "Homologué IJF", "100 à 160cm")
         )
-    )
+    )*/
+    //Données privées "Full" = non filtrées
+    private var listProductsFull : List<Product> = emptyList()
+    private var listCategoriesFull : List<String>  = emptyList()
+    //Etats UI
     private val _productsState = MutableStateFlow(ProductListState())
     val productState : StateFlow<ProductListState> = _productsState
 
@@ -131,24 +135,20 @@ class ListProductsVM(val repository: ProductRepository, workManager: WorkManager
             )
         }
     }
+    //Si aucune sélectionné, modifier l'état avec le liste complète
     fun selectCategory(category : String) {
-        if (category == _productsState.value.selectedCategory) {
-            _productsState.value = ProductListState(
-                null,
-                _listArticle
-            )
-        } else {
-            _productsState.value = ProductListState(
-                category,
-                _listArticle.filter { it.category == category }
-            )
-        }
-
+            if (category == _productsState.value.selectedCategory) {
+                _productsState.value =_productsState.value.copy(selectedCategory = null)
+            } else {
+                _productsState.value =_productsState.value.copy(
+                    selectedCategory = category,
+                    _productsState.value.productList.filter { it.category == category }
+                )
+            }
     }
 
-    fun getCategories() : List<String> {
-        return _listArticle.map { it.category }.distinct()
-    }
+    fun getCategories() : List<String> = listCategoriesFull
+
 
     fun getById(id : Int) : Product? {
         if(_productsState.value.productList.isEmpty()){
