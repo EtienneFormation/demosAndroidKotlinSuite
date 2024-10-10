@@ -1,8 +1,6 @@
 package com.eniecole.mod8corrworkmanager.bo
 
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Incident (
     val intitule:String,
     val resume:String,
