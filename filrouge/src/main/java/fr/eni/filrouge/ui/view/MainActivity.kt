@@ -1,4 +1,4 @@
-package fr.eni.filrouge
+package fr.eni.filrouge.ui.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

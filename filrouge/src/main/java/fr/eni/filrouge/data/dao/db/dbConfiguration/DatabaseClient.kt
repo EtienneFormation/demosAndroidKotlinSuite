@@ -8,5 +8,7 @@ class DatabaseClient(context: Context) {
         context.applicationContext,
         AppDatabase::class.java,
         "enishop.db"
-    ).build()
+    )
+    .fallbackToDestructiveMigration()
+    .build()
 }
