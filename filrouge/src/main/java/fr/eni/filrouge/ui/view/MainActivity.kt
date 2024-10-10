@@ -31,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -113,7 +112,7 @@ fun ArticleList(
     navigation : (Int) -> Unit,
     productsViewModel : ListProductsVM = viewModel(factory = ListProductsVM.Factory)
 ) {
-    val productsState = productsViewModel.productState.collectAsState().value
+    val productsState = productsViewModel.productsState
 
     Column {
         Categories(productsViewModel.getCategories(), productsViewModel)
@@ -123,7 +122,7 @@ fun ArticleList(
 
 @Composable
 fun Categories(categories: List<String>, productsViewModel : ListProductsVM) {
-    val selectedCategory = productsViewModel.productState.collectAsState().value.selectedCategory
+    val selectedCategory = productsViewModel.productsState.selectedCategory
 
     LazyRow {
         items(categories) {
@@ -175,6 +174,8 @@ fun ProductCard(product : Product, navigation : (Int) -> Unit) {
     }
 }
 
+
+//TODO Ajouter un viewModel pour les détails
 @Composable
 fun ArticleDetail(id : Int, productsViewModel : ListProductsVM =
     viewModel(factory = ListProductsVM.Factory)) {
@@ -207,6 +208,9 @@ fun ArticleDetail(id : Int, productsViewModel : ListProductsVM =
                         Text(it)
                     }
                 }
+                //Créer un espace entre deux "morceaux" de colonnes
+                // Utiliser Modifer.weight(1f)
+                //TODO Rajouter à la fin du détail (tout en bas) un bouton "Ajouter au panier"
             }
         }
 }

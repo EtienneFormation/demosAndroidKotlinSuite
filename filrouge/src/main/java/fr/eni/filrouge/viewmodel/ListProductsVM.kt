@@ -1,6 +1,9 @@
 package fr.eni.filrouge.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -16,8 +19,6 @@ import fr.eni.filrouge.data.model.Product
 import fr.eni.filrouge.data.repository.ProductRepository
 import fr.eni.filrouge.data.worker.SyncDataWorker
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -127,8 +128,9 @@ class ListProductsVM(val repository: ProductRepository, val workManager: WorkMan
     private var listProductsFull : List<Product> = emptyList()
     private var listCategoriesFull : List<String>  = emptyList()
     //Etats UI
-    private val _productsState = MutableStateFlow(ProductListState())
-    val productState : StateFlow<ProductListState> = _productsState
+
+    var productsState by mutableStateOf(ProductListState())
+        private set
 
     init {
         viewModelScope.launch {
@@ -154,7 +156,7 @@ class ListProductsVM(val repository: ProductRepository, val workManager: WorkMan
     private suspend fun _loadProducts(){
         withContext(Dispatchers.IO){
             val products = repository.fetchProducts()
-            _productsState.value = _productsState.value.copy(
+            productsState = productsState.copy(
                 productList = products
             )
         }
@@ -162,12 +164,12 @@ class ListProductsVM(val repository: ProductRepository, val workManager: WorkMan
 
     //Si aucune sélectionné, modifier l'état avec le liste complète
     fun selectCategory(category : String) {
-            if (category == _productsState.value.selectedCategory) {
-                _productsState.value =_productsState.value.copy(selectedCategory = null)
+            if (category == productsState.selectedCategory) {
+                productsState =productsState.copy(selectedCategory = null)
             } else {
-                _productsState.value =_productsState.value.copy(
+                productsState =productsState.copy(
                     selectedCategory = category,
-                    _productsState.value.productList.filter { it.category == category }
+                    productsState.productList.filter { it.category == category }
                 )
             }
     }
@@ -176,10 +178,10 @@ class ListProductsVM(val repository: ProductRepository, val workManager: WorkMan
 
 
     fun getById(id : Int) : Product? {
-        if(_productsState.value.productList.isEmpty()){
+        if(productsState.productList.isEmpty()){
             return null
         }
-        return _productsState.value.productList.find { it.id == id }
+        return productsState.productList.find { it.id == id }
     }
 
 
