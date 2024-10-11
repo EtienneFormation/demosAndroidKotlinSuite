@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -44,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import fr.eni.filrouge.data.model.Product
 import fr.eni.filrouge.ui.theme.Mod3layoutComposeTheme
+import fr.eni.filrouge.viewmodel.DetailProductVM
 import fr.eni.filrouge.viewmodel.ListProductsVM
 
 class MainActivity : ComponentActivity() {
@@ -177,40 +180,42 @@ fun ProductCard(product : Product, navigation : (Int) -> Unit) {
 
 //TODO Ajouter un viewModel pour les détails
 @Composable
-fun ArticleDetail(id : Int, productsViewModel : ListProductsVM =
-    viewModel(factory = ListProductsVM.Factory)) {
-    val article = productsViewModel.getById(id)
-    if(article==null){
+fun ArticleDetail(id : Int, productVM : DetailProductVM =
+    viewModel(factory = DetailProductVM.Factory)) {
+    productVM.getById(id)
+    if(productVM.productState==null){
         Text("Pac encore Chagé")
     }else
         Surface {
             Column {
                 Text(
-                    text = article.name,
+                    text = productVM.productState!!.name,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = "${article.price}€",
+                    text = "${productVM.productState!!.price}€",
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.padding(vertical = 8.dp))
                 AsyncImage(
-                    model = article.url,
+                    model = productVM.productState!!.url,
                     contentDescription = "oui",
                     modifier = Modifier.height(90.dp)
                 )
                 Spacer(Modifier.padding(vertical = 8.dp))
                 Title("Description")
-                Text(article.description)
+                Text(productVM.productState!!.description)
                 Title("Caractéristiques")
                 LazyColumn {
-                    items(article.characteristics) {
+                    items(productVM.productState!!.characteristics) {
                         Text(it)
                     }
                 }
                 //Créer un espace entre deux "morceaux" de colonnes
-                // Utiliser Modifer.weight(1f)
-                //TODO Rajouter à la fin du détail (tout en bas) un bouton "Ajouter au panier"
+                Spacer(Modifier.weight(1f))
+                ElevatedButton(modifier = Modifier.fillMaxWidth()
+                                        .padding(horizontal = 8.dp),
+                    onClick = {}) {Text("Ajouter au panier") }
             }
         }
 }
