@@ -17,6 +17,11 @@ object RepositoryModule {
     @Singleton
     fun provideProductRepository(@ApplicationContext context: Context)
         = ProductRepository(context)
+/*
+    @Provides
+    @Singleton
+    fun provideUserRepository(@ApplicationContext context: Context)
+            = UserRepository(context)*/
 
     @Provides
     @Singleton

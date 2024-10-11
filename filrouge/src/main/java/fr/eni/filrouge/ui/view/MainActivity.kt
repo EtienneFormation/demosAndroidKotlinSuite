@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -48,6 +47,7 @@ import coil.compose.AsyncImage
 import dagger.hilt.android.AndroidEntryPoint
 import fr.eni.filrouge.data.model.Product
 import fr.eni.filrouge.ui.theme.Mod3layoutComposeTheme
+import fr.eni.filrouge.ui.view.page.SignInPage
 import fr.eni.filrouge.viewmodel.DetailProductVM
 import fr.eni.filrouge.viewmodel.ListProductsVM
 
@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
 fun Menu(
     modifier : Modifier = Modifier,
     navController : NavHostController = rememberNavController(),
-    startDestination : String = "articles"
+    startDestination : String = "signInPage"
 ) {
     Surface  {
         NavHost(
@@ -102,6 +102,10 @@ fun Menu(
         ) {
             composable("articles") {
                 ArticleList(navigation = {id -> navController.navigate("detail/${id}")
+                })
+            }
+            composable("signInPage") {
+                SignInPage(navigationToArticles = {navController.navigate("articles")
                 })
             }
             composable("detail/{id}") { navBackStackEntry ->
@@ -183,8 +187,7 @@ fun ProductCard(product : Product, navigation : (Int) -> Unit) {
 
 //TODO Ajouter un viewModel pour les détails
 @Composable
-fun ArticleDetail(id : Int, productVM : DetailProductVM =
-    viewModel(factory = DetailProductVM.Factory)) {
+fun ArticleDetail(id : Int, productVM : DetailProductVM = hiltViewModel()) {
     productVM.getById(id)
     if(productVM.productState==null){
         Text("Pac encore Chagé")
