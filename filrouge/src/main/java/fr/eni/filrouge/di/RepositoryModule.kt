@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import fr.eni.filrouge.data.repository.CartRepository
 import fr.eni.filrouge.data.repository.ProductRepository
 import javax.inject.Singleton
 
@@ -17,11 +18,10 @@ object RepositoryModule {
     @Singleton
     fun provideProductRepository(@ApplicationContext context: Context)
         = ProductRepository(context)
-/*
+
     @Provides
     @Singleton
-    fun provideUserRepository(@ApplicationContext context: Context)
-            = UserRepository(context)*/
+    fun provideCartRepository() = CartRepository()
 
     @Provides
     @Singleton

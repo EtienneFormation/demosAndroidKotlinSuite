@@ -55,6 +55,7 @@ android {
 dependencies {
     //Hilt
     implementation("com.google.dagger:hilt-android:2.51")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     kapt("com.google.dagger:hilt-android-compiler:2.51")
     //Injection de dépendances dans les composable
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
