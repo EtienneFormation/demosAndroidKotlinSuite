@@ -43,6 +43,7 @@ fun SignInPage(modifier: Modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            //Champ email
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange = { vm.onEmailChanged(it) },
@@ -50,6 +51,7 @@ fun SignInPage(modifier: Modifier = Modifier,
                 isError = !uiState.isEmailValid,
                 modifier = Modifier.fillMaxWidth()
             )
+            //Message erruer email
             if (!uiState.isEmailValid) {
                 Text(
                     text = "Email invalide",
@@ -59,7 +61,7 @@ fun SignInPage(modifier: Modifier = Modifier,
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-
+            //Champs password
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = { vm.onPasswordChanged(it) },
@@ -68,6 +70,7 @@ fun SignInPage(modifier: Modifier = Modifier,
                 isError = !uiState.isPasswordValid,
                 modifier = Modifier.fillMaxWidth()
             )
+            //Message erreur password
             if (!uiState.isPasswordValid) {
                 Text(
                     text = "Le mot de passe doit contenir au moins 6 caractères",
