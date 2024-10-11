@@ -38,17 +38,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import dagger.hilt.android.AndroidEntryPoint
 import fr.eni.filrouge.data.model.Product
 import fr.eni.filrouge.ui.theme.Mod3layoutComposeTheme
 import fr.eni.filrouge.viewmodel.DetailProductVM
 import fr.eni.filrouge.viewmodel.ListProductsVM
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +116,7 @@ fun Menu(
 @Composable
 fun ArticleList(
     navigation : (Int) -> Unit,
-    productsViewModel : ListProductsVM = viewModel(factory = ListProductsVM.Factory)
+    productsViewModel : ListProductsVM = hiltViewModel()
 ) {
     val productsState = productsViewModel.productsState
 
